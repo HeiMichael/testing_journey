@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: miheider <miheider@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jseidere <jseidere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:11:41 by miheider          #+#    #+#             */
-/*   Updated: 2025/03/06 09:39:54 by miheider         ###   ########.fr       */
+/*   Updated: 2025/03/06 15:40:03 by jseidere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,14 @@
 #include "../include/Server.hpp"
 #include "../include/Configuration.hpp"
 
+# define CLIENT_MAX_BODY_SIZE 0
+# define CLIENT_HEADER_BUFFER_SIZE 1
+
 Server::Server() {
     std::string allowedValues[] = {
         "listen", "root", "server_name", "index", "client_max_body_size", "client_header_buffer_size"
     };
-    for(int i = 0; i < 6; i++) {
+    for(size_t i = 0; i < (sizeof(allowedValues) / sizeof(allowedValues[0])); i++) {
         this->map[allowedValues[i]] = std::vector<std::string>();
     }
 }
@@ -36,6 +39,16 @@ std::string Location::getFilePath() {
 }
 
 std::vector<std::string> Server::getKey(std::string key) {
+    for(std::map<std::string, std::vector <std::string> >::iterator it = map.begin(); it != map.end(); ++it) {
+        std::cout << "It->first: " << it->first << " Value " << key << std::endl;
+        if(it->first == key) {
+                return (it->second);
+        }
+    }
+    return (std::vector<std::string>());
+}
+
+std::vector<std::string> Location::getKey(std::string key) {
     for(std::map<std::string, std::vector <std::string> >::iterator it = map.begin(); it != map.end(); ++it) {
         std::cout << "It->first: " << it->first << " Value " << key << std::endl;
         if(it->first == key) {
@@ -73,30 +86,16 @@ std::string Server::getListen() {
     return ("");
 }
 
+
 Location::Location () {
     std::string allowedValues[] = {
         "index", "client_max_body_size", "error_page", "allowed_methods", "autoindex",
-    "return", "root", "name", "upload_store", "extension", "script_path", "cgi_pass"
-    };
-    for(int i = 0; i < 12; i++) {
+    "return", "root" };
+    for(size_t i = 0; i < (sizeof(allowedValues) / sizeof(allowedValues[0])); i++) {
         this->map[allowedValues[i]] = std::vector<std::string>();
     }
 }
 
-
-void Location::handleLocationKeyWords(std::string str) {
-    str = str.substr(0, str.find(" "));
-    if(str == "root")
-        root++;
-    else if (str == "index")
-        index++;
-    else if (str == "autoindex")
-        autoindex++;
-    else if (str == "cgi_pass")
-        cgiPass++;
-    else if (str == "upload_store")
-        uploadStore++;
-}
 
 void Location::printMapOrange() {
     std::cout << "\033[33m" << filePath << "\033[0m" << std::endl;
@@ -118,20 +117,13 @@ void Server::printLocation() {
 
 void Server::clear() {
     std::string allowedValues[] = {
-        "index", "client_max_body_size", "error_page", "allowed_methods", "autoindex",
-    "return", "root", "name", "upload_store", "extension", "script_path", "cgi_pass"
+        "listen", "root", "server_name", "index", "client_max_body_size", "client_header_buffer_size"
     };
-    for(int i = 0; i < 12; i++) {
+    for(size_t i = 0; i < (sizeof(allowedValues) / sizeof(allowedValues[0])); i++) {
         this->map[allowedValues[i]] = std::vector<std::string>();
     }
     map.clear();
     loc.clear();
-    listen = 0;
-    serverName = 0;
-    root = 0;
-    index = 0;
-    clientMaxBodySize = 0;
-    location = 0;
 }
 
 void Location::clear() {
@@ -139,9 +131,8 @@ void Location::clear() {
     map.clear();
     std::string allowedValues[] = {
         "index", "client_max_body_size", "error_page", "allowed_methods", "autoindex",
-    "return", "root", "name", "upload_store", "extension", "script_path", "cgi_pass"
-    };
-    for(int i = 0; i < 12; i++) {
+    "return", "root" };
+    for(size_t i = 0; i < (sizeof(allowedValues) / sizeof(allowedValues[0])); i++) {
         this->map[allowedValues[i]].clear();
     }
     root = 0;
@@ -157,9 +148,18 @@ void printVector(std::vector <std::string> vec) {
     }
 }
 
-/* void Server::handleErrorPage(std::string key) {
-    if
-} */
+bool isAllowedVar(std::string var) {
+    std::string allowedValues[] = {
+        "index", "client_max_body_size", "error_page", "allowed_methods", "autoindex",
+    "return", "root" };
+    for(size_t i = 0; i < (sizeof(allowedValues) / sizeof(allowedValues[0])); i++) {
+        if(allowedValues[i] == var)
+            return true;
+        else 
+            return false;
+    }
+    return false;
+}
 
 void Server::pushMap(std::string key, std::string value) {
     std::vector <std::string> vec;
@@ -205,8 +205,6 @@ void Location::pushMap(std::string key, std::string value) {
     std::vector <std::string> vec;
     int j = 0;
     std::map<std::string, std::vector<std::string> >::iterator it = map.find(key);
-    if(!it->second.empty()) 
-        std::cout << key << " Not empty" << std::endl;
     if((it != map.end() && it->second.empty()) || startsWith(key, "error_page")) {
         syntaxCheckLocation(key, value);
         if(isFilepath(value)) {
@@ -258,13 +256,6 @@ bool isKMG(char c) {
     return false;
 }
 
-int CheckSys() {
-    if(sizeof(void*) == 8)
-        return (64);
-    else 
-        return (32);
-}
-
 std::string calculateClientMaxBodySize(std::string value) {
     unsigned long num = 0;
     std::stringstream ss;
@@ -280,9 +271,7 @@ std::string calculateClientMaxBodySize(std::string value) {
         num *= 1024 * 1024;
     else if(value[value.length() - 1] == 'G')
         num *= 1024 * 1024 * 1024;
-    if(CheckSys() == 32 && num > 4294967297)
-        throw std::runtime_error("Error: client_max_body_size too high!");
-    else if (CheckSys() == 64 && num > 4294967297)                          // adjust number!!!
+    if(num > 4294967297)
         throw std::runtime_error("Error: client_max_body_size too high!");
     ss << num;
     std::string result = ss.str();
@@ -310,15 +299,10 @@ void checkRoot(std::string value, int flag) {
 void checkServerName(std::string value) {
     if(value.empty())
         throw std::runtime_error("Error: server_name can't be empty!");
-    //int dot = 0;
     for(size_t i = 0; i < value.length(); i++) {
         if(value[i] != '-' && value[i] != '.' && !isalnum(value[i]))
             throw std::runtime_error("Error: Invalid server name: " + value + "!");
-        /* if(value[i] == '.')
-            dot++; */
     }
-    // if(dot != 1)
-    //     throw std::runtime_error("Error: Invalid server name: " + value + "!");
 }
 
 void checkErrorPage(std::string key, std::string value) {
@@ -363,6 +347,9 @@ void checkCgiPass(std::string value) {
 void checkAllowedMethods(std::string value) {
     std::string allowedMethods[] = {"GET", "POST", "DELETE"};
     std::vector<std::string>  methods;
+    int g_count = 0;
+    int p_count = 0;
+    int d_count = 0;
     int j = 0;
     for(size_t i = 0; i < value.length(); i++) {
         if(value[i] == ' ') {
@@ -373,15 +360,22 @@ void checkAllowedMethods(std::string value) {
             methods.push_back(value.substr(j, value.length()));
     }
     for(size_t k = 0; k < methods.size(); k++) {
-        //std::cout << "Method: " << methods[k] << std::endl;
         if(methods[k] != "GET" && methods[k] != "POST" && methods[k] != "DELETE")
             throw std::runtime_error("Error: Invalid method " + methods[k] + "!");
+        if(methods[k] == "GET")
+            g_count++;
+        if(methods[k] == "POST")
+            p_count++;
+        if(methods[k] == "DELETE")
+            d_count++;  
     }
-    
+    if(methods.size() > 3)
+        throw std::runtime_error("Error: Max three methods allowed!");
+    if(g_count > 1 || p_count > 1 || d_count > 1)
+        throw std::runtime_error("Error: Each method allowed just once!");
 }
 
 void checkReturn(std::string key, std::string value) {
-    std::cout << "Key: " << key << " Value: " << value << std::endl;
     if(value.empty())
         throw std::runtime_error("Error: return can't be empty");
     key = key.substr(key.find(" ") + 1, key.length() - 1);
@@ -397,7 +391,20 @@ void checkClientHeaderBufferSize(std::string value) {
         if((value[i] != 'K' && !isdigit(value[i])))
             throw std::runtime_error("Error: Invalid value for client_header_buffer_size!");
     }
-    std::string num = calculateClientMaxBodySize(value);
+    size_t k = value.find('k');
+    if(k != std::string::npos) {
+        std::string num = value.substr(0, k);
+        int number = atoi(num.c_str());
+        if(number > 32)
+            throw std::runtime_error("Error: Too big value for client_header_buffer_size!");
+    }
+    else {
+        std::string num = value.substr(0);
+        int number = atoi(num.c_str());
+        if(number > 32768)
+            throw std::runtime_error("Error: Too big value for client_header_buffer_size!");
+    }
+        
 }
 
 void syntaxCheckServer(std::string key, std::string value) {

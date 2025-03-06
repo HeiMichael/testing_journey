@@ -6,7 +6,7 @@
 /*   By: jseidere <jseidere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 10:27:24 by miheider          #+#    #+#             */
-/*   Updated: 2025/03/05 15:19:32 by jseidere         ###   ########.fr       */
+/*   Updated: 2025/03/06 14:18:59 by jseidere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 #include "Configuration.hpp"
 #include <map>
+
+
 
 class Configuration;
 
@@ -31,11 +33,11 @@ class Location {
         void pushMap(std::string key, std::string value);
         void printMapOrange();
         void clear();
-        void handleLocationKeyWords(std::string str);
         std::string getFilePath();
         std::map <std::string, std::vector <std::string> > getMap();
         void setFilePath(std::string str);
         void setMap(std::map <std::string, std::vector <std::string> > m);
+        std::vector<std::string> getKey(std::string key);
 };
 
 class Server {

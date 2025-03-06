@@ -6,7 +6,7 @@
 /*   By: jseidere <jseidere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 15:28:58 by miheider          #+#    #+#             */
-/*   Updated: 2025/03/05 14:08:14 by jseidere         ###   ########.fr       */
+/*   Updated: 2025/03/06 15:38:18 by jseidere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,6 +252,12 @@ std::string to_string_c98(int value) {
 }
 
 bool startsWith(const std::string& str, const std::string& prefix) {
+    std::string compare;
+    size_t pos = 0;
+    pos = str.find(" ");
+    compare = str.substr(0, pos);
+    if(compare != prefix)
+        return false;
     return str.find(prefix) == 0;
 }
 
@@ -300,7 +306,7 @@ void Configuration::lexer() {
     for (size_t i = 0; i < tokens.size(); i++) {
         if(tokens[i] == "server" && flag == SERVER_CLOSED) {
             if(i < tokens.size() && tokens[i + 1] != "{")
-                throw std::runtime_error ("Error: expecting '{', but found '" + tokens[i + 1] + "' in token[" + to_string_c98(i) + "]" +"!");
+                throw std::runtime_error ("Error: expecting '{', but found '" + tokens[i + 1] + "' in token[" + to_string_c98(i + 1) + "]" +"!");
             flag = SERVER_OPEN;
             tmp = Server();
             continue;
@@ -321,7 +327,7 @@ void Configuration::lexer() {
                 key = tokens[i].substr(0, tokens[i].find(" "));
             }
             if(!checkSpaces(tokens[i])) {
-                printYellow("Error: ", "Consecutive spaces in line!");
+                throw std::runtime_error("Error: Consecutive spaces in line!");
             } else if (key == "location") {
                 while(tokens[i] != "}") {
                     if(tokens[i] == "location" && isFilepath(tokens[i + 1])) {
@@ -330,7 +336,6 @@ void Configuration::lexer() {
                     }
                     if(tokens[i] == "{")
                         i++;
-                    tmpLoc.handleLocationKeyWords(tokens[i]);
                     key = tokens[i].substr(0, tokens[i].find(" "));
                     value = tokens[i].substr(tokens[i].find(" ") + 1, tokens[i].size());
                     tmpLoc.pushMap(key, value);
@@ -356,11 +361,13 @@ void Configuration::lexer() {
             tmp.pushMap(key, value);
         }
     }
-    if(flag == SERVER_OPEN)
-        serverVec.push_back(tmp);
+    /* if(flag == SERVER_OPEN)
+        serverVec.push_back(tmp); */
 }
 
 bool isFilepath(std::string str) {
+    if (str.find(' ') != std::string::npos)
+        return false;
     return (str.find("/") != std::string::npos);
 }
 //get through the ServerVec and check if you find host || port if valid host is found check if same
@@ -393,9 +400,7 @@ Server* Configuration::getServer(std::string host, std::string port) {
 }
 
 void Configuration::checkLines(std::ifstream &file) {
-    //Configuration ConfigFile;
     std::string oldLine, line;
-    // int hierachy = 0;
     while (std::getline(file, line)) {
         line = trim(line);
         handleKeyWords(line);
@@ -409,23 +414,22 @@ void Configuration::checkLines(std::ifstream &file) {
     clearVec();
     if(getServerAmount() == 0)
         throw std::runtime_error("Error: No server blocks found!");
-    printContainerGreen(getTokens());
+    if(getTokens().at(0) != "server") {
+        throw std::runtime_error("Error: First instance must be server");
+    }
+    //printContainerGreen(getTokens()); print the tokens
     lexer();
-    printServerList();
-    //std::cout << "ServerVec size: " << ConfigFile.getServerVec().size() << std::endl;
-    //ConfigFile.syntaxMap();
+    //printServerList(); prints server list
 }
 
 int Configuration::parseConfig(std::string filename) {
-    //std::string filename = "/home/jseidere/Comon_core/Webserver/config_files/default.conf";
-    //std::string filename = "/home/jseidere/Comon_core/Webserver/config_files/complex.conf";
     std::ifstream file(filename.c_str());
     if(!file.is_open()) {
-        std::cerr << "Couldn't open file!" << std::endl;
+        throw std::runtime_error("\033[1;31mCouldn't open file!\033[0m");
         return(false);
     }
     if(!checkBrackets(file))
-        std::cerr << "\033[31mCouldn't open file!\033[0m" << std::endl;
+        throw std::runtime_error("\033[1;31mError: Brackets syntax wrong!\033[0m");
     else
         std::cout << "\033[32mBrackets closed!\033[0m" << std::endl;
     file.clear();
