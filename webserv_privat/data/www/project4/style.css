@@ -1,0 +1,14 @@
+body {
+  margin: 0;
+  padding: 0;
+  justify-content: left;
+  align-items: top;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+  background-color: #eb6666;
+}
+
+h1 {
+  font-size: 3rem;
+  text-align: center;
+}
