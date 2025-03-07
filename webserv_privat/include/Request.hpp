@@ -6,7 +6,7 @@
 /*   By: miheider <miheider@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 23:21:41 by miheider          #+#    #+#             */
-/*   Updated: 2025/03/07 14:42:24 by miheider         ###   ########.fr       */
+/*   Updated: 2025/03/07 17:53:46 by miheider         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,15 @@
 
 class Request {
     private:
+        enum status {
+            INVALID,
+            GET,
+            POST,
+            DELETE,
+            HEAD,
+            OPTIONS,
+            TRACE
+        };
         static unsigned int                                     _next_id;
         unsigned int                                            _id;
         std::string                                             _method;

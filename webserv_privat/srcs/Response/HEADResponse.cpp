@@ -1,16 +1,13 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   AResponse.cpp                                      :+:      :+:    :+:   */
+/*   HEADResponse.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: miheider <miheider@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/14 14:11:39 by miheider          #+#    #+#             */
-/*   Updated: 2025/03/07 12:36:26 by miheider         ###   ########.fr       */
+/*   Created: 2025/03/07 17:46:30 by miheider          #+#    #+#             */
+/*   Updated: 2025/03/07 17:47:13 by miheider         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "AResponse.hpp"
-
-AResponse::AResponse() {}
-
+#include "../../include/Response/HEADResponse.hpp"

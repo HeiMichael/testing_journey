@@ -6,7 +6,7 @@
 /*   By: miheider <miheider@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 22:29:50 by miheider          #+#    #+#             */
-/*   Updated: 2025/03/07 17:22:06 by miheider         ###   ########.fr       */
+/*   Updated: 2025/03/07 17:54:35 by miheider         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,12 +139,24 @@ Server* Request::get_my_server() const {
     return _my_server;
 }
 
-// short Request::get_status() {
-//     if (!_is_valid || !_is_complete)
-//         return 0;
-//     else if (_is_valid && _method == "GET")
-//         return 1;
-// }
+short Request::get_status() {
+    if (!_is_valid || !_is_complete)
+        return INVALID;
+    else if (_is_valid && _method == "GET")
+        return GET;
+    else if (_is_valid && _method == "POST")
+        return POST;
+    else if (_is_valid && _method == "DELETE")
+        return DELETE;
+    else if (_is_valid && _method == "HEAD")
+        return HEAD;
+    else if (_is_valid && _method == "OPTIONS")
+        return OPTIONS;
+    else if (_is_valid && _method == "TRACE")
+        return TRACE;
+    else 
+        return -1;
+}
 
 
 void Request::print() const {
