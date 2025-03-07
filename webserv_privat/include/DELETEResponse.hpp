@@ -1,27 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Response.hpp                                       :+:      :+:    :+:   */
+/*   DELETEResponse.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: miheider <miheider@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/14 10:26:46 by miheider          #+#    #+#             */
-/*   Updated: 2025/03/05 08:18:29 by miheider         ###   ########.fr       */
+/*   Created: 2025/03/07 14:02:35 by miheider          #+#    #+#             */
+/*   Updated: 2025/03/07 14:04:24 by miheider         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-class Response {
+#include "AResponse.hpp"
 
+class DELETEResponse : public AResponse {
+    
 };
-
-
-/*
-used status codes:
-200 OK
-400
-
-
-
-*/

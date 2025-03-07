@@ -6,7 +6,7 @@
 /*   By: miheider <miheider@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 22:29:50 by miheider          #+#    #+#             */
-/*   Updated: 2025/03/06 14:34:34 by miheider         ###   ########.fr       */
+/*   Updated: 2025/03/07 14:51:10 by miheider         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ unsigned int Request::_next_id = 0;
 Request::Request() {}
 
 Request::Request(std::string buffer, Configuration &ConfigFile): 
-        _id(_next_id++), _content_length(0), _is_cgi(false), _is_valid(true), 
-        _is_complete(true), _is_body(false), _is_query(false), _is_host(false), _is_port(false), 
-        _is_content_length(false), _is_transfer_encoding(false), _status_code(200), 
+        _id(_next_id++), _content_length(0), _is_cgi(false), _is_bash(false), _is_python(false), 
+        _is_valid(true), _is_complete(true), _is_body(false), _is_query(false), _is_host(false), 
+        _is_port(false), _is_content_length(false), _is_transfer_encoding(false), _status_code(200), 
         _client_header_buffer_size(DEFAULT_HEADER_SIZE), _client_max_body_size(0) {
     parse_request(buffer, ConfigFile);
 }
@@ -91,6 +91,14 @@ bool Request::get_is_cgi() const {
     return _is_cgi;
 }
 
+bool Request::get_is_bash() const {
+    return _is_bash;
+}
+
+bool Request::get_is_python() const {
+    return _is_python;
+}
+
 bool Request::get_is_valid() const {
     return _is_valid;
 }
@@ -129,6 +137,13 @@ unsigned int Request::get_header_size() const {
 
 Server* Request::get_my_server() const {
     return _my_server;
+}
+
+short Request::get_status() {
+    if (!_is_valid || !_is_complete)
+        return 0;
+    else if (_is_valid && _method == "GET")
+        return 1;
 }
 
 
@@ -320,8 +335,13 @@ void Request::validate_uri() {
 
     if (cgi_check.substr(dot + 1) == "py" || cgi_check.substr(dot + 1) == "sh") {
         _is_cgi = true;
+        if (cgi_check.substr(dot + 1) == "py") {
+            _is_python = true;
+        } else {
+            _is_bash = true;
+        }
     } else if (cgi_check.substr(dot + 1) == "html") {
-
+        ;
     } else {
         _is_valid = false;
         _status_code = 26501;

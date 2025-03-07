@@ -6,7 +6,7 @@
 /*   By: miheider <miheider@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 23:21:41 by miheider          #+#    #+#             */
-/*   Updated: 2025/03/06 14:35:30 by miheider         ###   ########.fr       */
+/*   Updated: 2025/03/07 14:42:24 by miheider         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ class Request {
         std::string                                             _host;
         std::string                                             _port;
         bool                                                    _is_cgi;
+        bool                                                    _is_bash;
+        bool                                                    _is_python;
         bool                                                    _is_valid;
         bool                                                    _is_complete;
         bool                                                    _is_body;
@@ -86,6 +88,8 @@ class Request {
         const std::string&                                      get_host() const;
         const std::string&                                      get_port() const;
         bool                                                    get_is_cgi() const;
+        bool                                                    get_is_bash() const;
+        bool                                                    get_is_python() const;
         bool                                                    get_is_valid() const;
         bool                                                    get_is_complete() const;
         bool                                                    get_is_body() const;
@@ -97,6 +101,7 @@ class Request {
         Server                                                  *get_my_server() const;        
         unsigned int                                            get_header_size() const;
         void                                                    print() const;
+        short                                                   get_status();
 };
 
 // 400  Bad Request

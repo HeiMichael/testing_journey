@@ -6,7 +6,7 @@
 /*   By: miheider <miheider@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 14:24:16 by miheider          #+#    #+#             */
-/*   Updated: 2025/03/05 16:21:59 by miheider         ###   ########.fr       */
+/*   Updated: 2025/03/07 12:55:52 by miheider         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,9 @@ int startServer(Configuration ConfigFile) {
                     Request request(buffer, ConfigFile);
                     request.print();
                     std::cout << "Sending response:\n" << response << std::endl;
+                    int status = request.get_status();
+                    //Response response(request);
+                    //int status = Response.get_status(); 
                     send(client_fd, response, strlen(response), 0);
                     std::clock_t end = std::clock();
                     double process_time = static_cast<double>(end - start) * 1000.0 / CLOCKS_PER_SEC;
