@@ -6,7 +6,7 @@
 /*   By: miheider <miheider@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 22:29:50 by miheider          #+#    #+#             */
-/*   Updated: 2025/03/07 14:51:10 by miheider         ###   ########.fr       */
+/*   Updated: 2025/03/07 17:21:11 by miheider         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,8 @@ void Request::print() const {
     std::cout << "cont_len: " << get_content_length() << std::endl;
     std::cout << "body: " << get_body() << std::endl;
     std::cout << "cgi: " << get_is_cgi() << std::endl;
+    std::cout << "_is_bash: " << get_is_bash() << std::endl;
+    std::cout << "_is_python: " << get_is_python() << std::endl;
     std::cout << "\033[1m\033[32mvalid: " << get_is_valid() << "\033[0m" << std::endl;
     std::cout << "complete: " << get_is_complete() << std::endl;
     std::cout << "is_body: " << get_is_body() << std::endl;
