@@ -6,7 +6,7 @@
 /*   By: miheider <miheider@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 14:24:16 by miheider          #+#    #+#             */
-/*   Updated: 2025/03/07 12:55:52 by miheider         ###   ########.fr       */
+/*   Updated: 2025/03/07 17:21:45 by miheider         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,7 @@ int startServer(Configuration ConfigFile) {
                     Request request(buffer, ConfigFile);
                     request.print();
                     std::cout << "Sending response:\n" << response << std::endl;
-                    int status = request.get_status();
+                    // int status = request.get_status();
                     //Response response(request);
                     //int status = Response.get_status(); 
                     send(client_fd, response, strlen(response), 0);

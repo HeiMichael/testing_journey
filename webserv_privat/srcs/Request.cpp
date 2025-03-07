@@ -6,7 +6,7 @@
 /*   By: miheider <miheider@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 22:29:50 by miheider          #+#    #+#             */
-/*   Updated: 2025/03/07 17:21:11 by miheider         ###   ########.fr       */
+/*   Updated: 2025/03/07 17:22:06 by miheider         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,12 +139,12 @@ Server* Request::get_my_server() const {
     return _my_server;
 }
 
-short Request::get_status() {
-    if (!_is_valid || !_is_complete)
-        return 0;
-    else if (_is_valid && _method == "GET")
-        return 1;
-}
+// short Request::get_status() {
+//     if (!_is_valid || !_is_complete)
+//         return 0;
+//     else if (_is_valid && _method == "GET")
+//         return 1;
+// }
 
 
 void Request::print() const {
