@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width" initial-scale="1.0">
+    <title>Welcome</title>
+    <script type="text/javascript">
+      window.onload = function() {
+        const param = new URLSearchParams(window.location.search);
+        const username = param.get('username');
+        const password = param.get('password');
+        const hashed_pw = param.get('hashed_pw');
+
+        document.getElementById('welcomeMessage').innerText = "Welcome, " + username +"!";
+        document.getElementById('password').innerText = "Your password is: " + password + "!";
+        document.getElementById('hashed_pw').innerText = "Your hashed password is: " + hashed_pw + "!";
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Welcome to the Welcome page!</h1>
+    <p id="welcomeMessage">Dear, {{username}}!</p>
+    <p>Enjoy evaluating the bonus part. You look great today ... as usual!</p>
+    <p id="password">Your password is: </p>
+    <p id="hashed_pw">Your hashed password is: </p>
+    <p> <strong>IMPORTANT INFORMATION:</strong><br><br>Keep your passwords secret.</p>
+  </body>
+</html>
